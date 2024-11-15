@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract MessageStorage {
+    // Mapping to store messages by user address
+    mapping(address => string) private messages;
+
+    // Event to log message storage
+    event MessageStored(address indexed user, string message);
+
+    // Function to store a message with a character limit of 100
+    function storeMessage(string memory _message) public {
+        require(bytes(_message).length <= 100, "Message exceeds 100 characters");
+        messages[msg.sender] = _message;
+        emit MessageStored(msg.sender, _message);
+    }
+
+    // Function to retrieve the stored message, accessible only by the owner of the message
+    function retrieveMessage() public view returns (string memory) {
+        require(bytes(messages[msg.sender]).length > 0, "No message stored");
+        return messages[msg.sender];
+    }
+}
+
+
